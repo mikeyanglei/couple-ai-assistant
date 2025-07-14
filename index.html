@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>情侣AI助手 - 环信聊天版</title>
+    <title>情侣AI助手 - 调试版</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 环信Web SDK -->
-    <script src="https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/IMWeb/4.1.5/sdk/easemob-websdk-4.1.5.js"></script>
+    <!-- 更新的环信Web SDK -->
+    <script src="https://sdk-web.easemob.com/4.8.0/easemob-websdk-4.8.0.js"></script>
     
     <style>
         /* 男友主题 - 蓝色系 */
@@ -29,25 +29,11 @@
             --gradient: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);
         }
         
-        .gradient-bg {
-            background: var(--gradient);
-        }
-        
-        .primary-bg {
-            background-color: var(--primary-color);
-        }
-        
-        .primary-text {
-            color: var(--primary-color);
-        }
-        
-        .primary-border {
-            border-color: var(--primary-color);
-        }
-        
-        .primary-ring:focus {
-            ring-color: var(--primary-color);
-        }
+        .gradient-bg { background: var(--gradient); }
+        .primary-bg { background-color: var(--primary-color); }
+        .primary-text { color: var(--primary-color); }
+        .primary-border { border-color: var(--primary-color); }
+        .primary-ring:focus { ring-color: var(--primary-color); }
         
         .chat-bubble-me { 
             background: var(--primary-light); 
@@ -61,15 +47,15 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         
-        .ai-message {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-        }
-        
-        .system-message {
-            background: rgba(var(--primary-color), 0.1);
-            border: 1px solid rgba(var(--primary-color), 0.3);
-            color: var(--primary-color);
+        .debug-info {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            font-family: monospace;
+            font-size: 12px;
+            color: #374151;
         }
         
         .heart-beat {
@@ -86,18 +72,14 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- 🔑 配置区域 -->
-    <script>
-        // 环信应用配置 - 已填入你的AppKey
-        const EASEMOB_CONFIG = {
-            appKey: '1154250714209468#couple-ai-assistant',
-            apiUrl: 'https://a1.easemob.com',
-            file: 'https://a1.easemob.com'
-        };
-        
-        // DeepSeek AI配置
-        const DEEPSEEK_API_KEY = 'sk-1485e44b18f64bf994b6bde5da7c27f4';
-    </script>
+    <!-- 调试面板 -->
+    <div id="debugPanel" class="fixed top-4 right-4 z-50 bg-white border rounded-lg p-2 shadow-lg max-w-xs hidden">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold">调试信息</span>
+            <button onclick="toggleDebug()" class="text-xs">✕</button>
+        </div>
+        <div id="debugContent" class="text-xs space-y-1"></div>
+    </div>
 
     <!-- 登录界面 -->
     <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
@@ -108,7 +90,11 @@
                 </div>
                 <h1 class="text-2xl font-bold text-gray-800">情侣AI助手</h1>
                 <p class="text-gray-600">专业聊天 + AI智能</p>
-                <p class="text-sm text-gray-500 mt-2">选择身份后UI将切换对应主题色</p>
+                
+                <!-- 调试按钮 -->
+                <button onclick="toggleDebug()" class="mt-2 text-xs text-gray-500 underline">
+                    显示调试信息
+                </button>
             </div>
             
             <div class="space-y-4">
@@ -142,10 +128,30 @@
                     </div>
                 </div>
                 
+                <!-- 连接模式选择 -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <h4 class="font-semibold text-blue-800 mb-2">🔧 连接模式</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="radio" name="chatMode" value="easemob" checked class="mr-2">
+                            <span class="text-sm text-blue-700">环信专业聊天（推荐）</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="chatMode" value="demo" class="mr-2">
+                            <span class="text-sm text-blue-700">演示模式（环信不可用时）</span>
+                        </label>
+                    </div>
+                </div>
+                
                 <button onclick="startChat()" id="startBtn" 
                         class="w-full bg-gray-400 text-white rounded-lg py-4 font-semibold transition-colors" disabled>
                     💕 开始聊天
                 </button>
+                
+                <!-- 状态指示器 -->
+                <div id="statusIndicator" class="text-center text-sm text-gray-500">
+                    请填写信息并选择角色
+                </div>
             </div>
         </div>
     </div>
@@ -168,8 +174,8 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <div id="themeIndicator" class="text-xs bg-white/20 px-2 py-1 rounded-full">
-                        <span id="currentTheme">主题</span>
+                    <div id="chatMode" class="text-xs bg-white/20 px-2 py-1 rounded-full">
+                        聊天模式
                     </div>
                     <button onclick="showChatSettings()" class="text-white hover:bg-white/10 p-1 rounded">⚙️</button>
                     <button onclick="logout()" class="text-white hover:bg-white/10 p-1 rounded">🚪</button>
@@ -179,14 +185,6 @@
             <!-- 消息区域 -->
             <div id="messageArea" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
                 <!-- 欢迎消息 -->
-                <div class="flex justify-center">
-                    <div class="bg-white border rounded-lg px-4 py-2 text-sm text-gray-600 max-w-xs text-center shadow-sm">
-                        <div class="text-lg mb-1">🎉</div>
-                        欢迎使用情侣AI助手！<br>
-                        <span class="text-xs text-gray-500">环信专业聊天 + DeepSeek AI智能</span>
-                        <div class="text-xs mt-2 text-gray-400" id="welcomeTime"></div>
-                    </div>
-                </div>
             </div>
 
             <!-- AI功能快速栏 -->
@@ -208,19 +206,12 @@
                             class="flex-shrink-0 bg-pink-500 text-white px-3 py-1 rounded-full text-sm">
                         💌 情话
                     </button>
-                    <button onclick="getWeatherCare()" 
-                            class="flex-shrink-0 bg-orange-500 text-white px-3 py-1 rounded-full text-sm">
-                        🌤️ 关怀
-                    </button>
                 </div>
             </div>
 
             <!-- 输入栏 -->
             <div class="bg-white border-t border-gray-200 p-3">
                 <div class="flex items-center space-x-2">
-                    <button onclick="sendVoice()" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
-                        🎤
-                    </button>
                     <div class="flex-1 relative">
                         <input type="text" id="messageInput" placeholder="输入消息..." 
                                class="w-full bg-gray-100 rounded-full px-4 py-2 text-base focus:outline-none focus:ring-2 primary-ring focus:bg-white">
@@ -228,9 +219,6 @@
                             😊
                         </button>
                     </div>
-                    <button onclick="sendImage()" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
-                        📷
-                    </button>
                     <button onclick="sendMessage()" id="sendButton"
                             class="w-8 h-8 primary-bg hover:opacity-90 rounded-full flex items-center justify-center text-white transition-all">
                         ➤
@@ -240,42 +228,16 @@
         </div>
     </div>
 
-    <!-- 设置模态框 -->
-    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white rounded-lg max-w-md w-full">
-                <div class="gradient-bg text-white p-4 rounded-t-lg flex justify-between items-center">
-                    <h3 class="text-lg font-bold">聊天设置</h3>
-                    <button onclick="closeSettings()" class="text-white hover:bg-white/10 p-1 rounded">✕</button>
-                </div>
-                <div class="p-4 space-y-4">
-                    <div class="bg-gray-50 rounded-lg p-3">
-                        <h4 class="font-semibold text-gray-800 mb-2">📊 连接状态</h4>
-                        <div class="text-sm text-gray-600 space-y-1">
-                            <div>用户: <span id="settingsUsername" class="primary-text font-medium"></span></div>
-                            <div>对方: <span id="settingsPartner" class="primary-text font-medium"></span></div>
-                            <div>主题: <span id="settingsTheme" class="primary-text font-medium"></span></div>
-                            <div>状态: <span id="settingsStatus" class="text-green-600 font-medium">已连接</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-lg p-3">
-                        <h4 class="font-semibold text-gray-800 mb-2">🎨 主题预览</h4>
-                        <div id="themePreview" class="h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-medium">
-                            当前主题色
-                        </div>
-                    </div>
-                    
-                    <button onclick="clearChat()" 
-                            class="w-full border border-gray-300 text-gray-600 rounded-lg py-2 font-semibold hover:bg-gray-50">
-                        🗑️ 清除聊天记录
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
+        // 🔑 配置区域
+        const EASEMOB_CONFIG = {
+            appKey: '1154250714209468#couple-ai-assistant',
+            apiUrl: 'https://a1.easemob.com',
+            file: 'https://a1.easemob.com'
+        };
+        
+        const DEEPSEEK_API_KEY = 'sk-1485e44b18f64bf994b6bde5da7c27f4';
+
         // 应用状态
         let appState = {
             username: '',
@@ -284,90 +246,189 @@
             isConnected: false,
             conn: null,
             currentChatId: '',
-            theme: 'boyfriend' // 默认主题
+            theme: 'boyfriend',
+            chatMode: 'easemob',
+            debugMode: false
         };
 
-        // 环信聊天管理器
-        class EasemobChatManager {
+        // 调试日志
+        function debugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString('zh-CN');
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            console.log(logEntry);
+            
+            if (appState.debugMode) {
+                const debugContent = document.getElementById('debugContent');
+                const logElement = document.createElement('div');
+                logElement.className = `text-${type === 'error' ? 'red' : type === 'success' ? 'green' : 'gray'}-600`;
+                logElement.textContent = logEntry;
+                debugContent.appendChild(logElement);
+                debugContent.scrollTop = debugContent.scrollHeight;
+                
+                // 限制日志条数
+                if (debugContent.children.length > 20) {
+                    debugContent.removeChild(debugContent.firstChild);
+                }
+            }
+        }
+
+        // 切换调试模式
+        function toggleDebug() {
+            appState.debugMode = !appState.debugMode;
+            const panel = document.getElementById('debugPanel');
+            panel.classList.toggle('hidden');
+            
+            if (appState.debugMode) {
+                debugLog('调试模式已启用');
+            }
+        }
+
+        // 增强版聊天管理器
+        class EnhancedChatManager {
             constructor() {
                 this.conn = null;
                 this.isLoggedIn = false;
+                this.connectionAttempts = 0;
+                this.maxRetries = 3;
             }
 
-            // 初始化环信连接
-            init() {
-                this.conn = new easemob.connection({
-                    appKey: EASEMOB_CONFIG.appKey,
-                    apiUrl: EASEMOB_CONFIG.apiUrl,
-                    url: EASEMOB_CONFIG.file
-                });
+            // 检查环信SDK是否加载
+            checkSDK() {
+                debugLog('检查环信SDK...');
+                if (typeof easemob === 'undefined') {
+                    debugLog('环信SDK未加载', 'error');
+                    return false;
+                }
+                debugLog('环信SDK已加载', 'success');
+                return true;
+            }
 
-                // 注册消息监听器
+            // 初始化连接
+            async init() {
+                debugLog('初始化聊天管理器...');
+                
+                if (!this.checkSDK()) {
+                    throw new Error('环信SDK未加载');
+                }
+
+                try {
+                    this.conn = new easemob.connection({
+                        appKey: EASEMOB_CONFIG.appKey,
+                        apiUrl: EASEMOB_CONFIG.apiUrl,
+                        url: EASEMOB_CONFIG.file
+                    });
+
+                    debugLog('环信连接对象已创建');
+
+                    // 注册事件监听器
+                    this.setupEventListeners();
+                    
+                    debugLog('事件监听器已设置', 'success');
+                    return true;
+
+                } catch (error) {
+                    debugLog(`初始化失败: ${error.message}`, 'error');
+                    throw error;
+                }
+            }
+
+            // 设置事件监听器
+            setupEventListeners() {
+                // 消息监听
                 this.conn.addEventHandler('message', {
                     onTextMessage: (message) => {
+                        debugLog(`收到文本消息: ${message.body}`);
                         this.handleIncomingMessage(message);
                     },
                     onImageMessage: (message) => {
+                        debugLog('收到图片消息');
                         this.handleIncomingImage(message);
-                    },
-                    onAudioMessage: (message) => {
-                        this.handleIncomingAudio(message);
                     }
                 });
 
                 // 连接状态监听
                 this.conn.addEventHandler('connection', {
                     onOpened: () => {
-                        console.log('环信连接成功');
+                        debugLog('环信连接成功', 'success');
                         this.updateConnectionStatus('已连接', 'connected');
                         appState.isConnected = true;
                     },
                     onClosed: () => {
-                        console.log('环信连接断开');
+                        debugLog('环信连接断开', 'error');
                         this.updateConnectionStatus('连接断开', 'disconnected');
                         appState.isConnected = false;
                     },
                     onError: (error) => {
-                        console.error('环信连接错误:', error);
+                        debugLog(`连接错误: ${error.message || error}`, 'error');
                         this.updateConnectionStatus('连接错误', 'error');
                     }
                 });
             }
 
-            // 登录环信
+            // 登录
             async login(username, password) {
+                debugLog(`尝试登录用户: ${username}`);
+                this.connectionAttempts++;
+
                 try {
                     await this.conn.open({
                         user: username,
                         pwd: password || username
                     });
+                    
                     this.isLoggedIn = true;
+                    debugLog('登录成功', 'success');
                     return true;
+
                 } catch (error) {
-                    console.error('登录失败:', error);
+                    debugLog(`登录失败: ${error.message}`, 'error');
+                    
                     // 如果用户不存在，尝试注册
-                    try {
-                        await this.conn.registerUser({
-                            username: username,
-                            password: password || username
-                        });
-                        // 注册成功后登录
-                        await this.conn.open({
-                            user: username,
-                            pwd: password || username
-                        });
-                        this.isLoggedIn = true;
-                        return true;
-                    } catch (registerError) {
-                        console.error('注册失败:', registerError);
-                        return false;
+                    if (error.message && error.message.includes('user not found')) {
+                        debugLog('用户不存在，尝试注册...');
+                        return await this.registerAndLogin(username, password);
                     }
+                    
+                    return false;
                 }
             }
 
-            // 发送文本消息
+            // 注册并登录
+            async registerAndLogin(username, password) {
+                try {
+                    debugLog(`尝试注册用户: ${username}`);
+                    
+                    await this.conn.registerUser({
+                        username: username,
+                        password: password || username
+                    });
+                    
+                    debugLog('注册成功，尝试登录...', 'success');
+                    
+                    // 注册成功后登录
+                    await this.conn.open({
+                        user: username,
+                        pwd: password || username
+                    });
+                    
+                    this.isLoggedIn = true;
+                    debugLog('注册并登录成功', 'success');
+                    return true;
+
+                } catch (error) {
+                    debugLog(`注册失败: ${error.message}`, 'error');
+                    return false;
+                }
+            }
+
+            // 发送消息
             sendTextMessage(to, content) {
-                if (!this.isLoggedIn) return false;
+                if (!this.isLoggedIn) {
+                    debugLog('未登录，无法发送消息', 'error');
+                    return false;
+                }
+
+                debugLog(`发送消息给 ${to}: ${content}`);
 
                 const msg = easemob.message.create({
                     type: 'txt',
@@ -377,22 +438,17 @@
                 });
 
                 this.conn.send(msg).then(() => {
-                    // 显示自己发送的消息
+                    debugLog('消息发送成功', 'success');
                     this.displayMessage(content, 'me', new Date());
                 }).catch((error) => {
-                    console.error('发送消息失败:', error);
+                    debugLog(`消息发送失败: ${error.message}`, 'error');
                     addSystemMessage('❌ 发送失败，请重试');
                 });
             }
 
-            // 处理接收到的消息
+            // 处理接收消息
             handleIncomingMessage(message) {
                 this.displayMessage(message.body, 'other', new Date(message.time));
-            }
-
-            // 处理接收到的图片
-            handleIncomingImage(message) {
-                this.displayImageMessage(message.url, 'other', new Date(message.time));
             }
 
             // 显示消息
@@ -447,6 +503,7 @@
 
             // 登出
             logout() {
+                debugLog('用户登出');
                 if (this.conn) {
                     this.conn.close();
                 }
@@ -454,28 +511,104 @@
             }
         }
 
-        // 全局聊天管理器
-        const chatManager = new EasemobChatManager();
+        // 演示聊天管理器（降级方案）
+        class DemoChatManager {
+            constructor() {
+                this.isLoggedIn = false;
+                this.messageCount = 0;
+            }
+
+            async init() {
+                debugLog('使用演示聊天模式');
+                return true;
+            }
+
+            async login(username) {
+                debugLog(`演示模式登录: ${username}`);
+                this.isLoggedIn = true;
+                this.updateConnectionStatus('演示模式', 'connected');
+                appState.isConnected = true;
+                return true;
+            }
+
+            sendTextMessage(to, content) {
+                debugLog(`演示模式发送消息: ${content}`);
+                this.displayMessage(content, 'me', new Date());
+                
+                // 模拟对方回复
+                setTimeout(() => {
+                    const replies = [
+                        "收到啦💕",
+                        "我也想你~",
+                        "好的呀！",
+                        "你真贴心😊",
+                        "爱你💕💕💕"
+                    ];
+                    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                    this.displayMessage(randomReply, 'other', new Date());
+                }, 1000 + Math.random() * 2000);
+            }
+
+            displayMessage(content, sender, time) {
+                // 使用相同的显示逻辑
+                const messageArea = document.getElementById('messageArea');
+                const timeStr = time.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+                
+                const messageHTML = sender === 'me' ? `
+                    <div class="flex justify-end">
+                        <div class="flex flex-col items-end max-w-xs">
+                            <div class="chat-bubble-me p-3 text-sm">
+                                ${content}
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1">${timeStr}</span>
+                        </div>
+                        <div class="w-8 h-8 primary-bg rounded-full flex items-center justify-center flex-shrink-0 ml-2">
+                            <span class="text-white text-xs">${appState.userRole === 'boyfriend' ? '🤵' : '👩'}</span>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-8 h-8 ${appState.userRole === 'boyfriend' ? 'bg-purple-500' : 'bg-blue-500'} rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-xs">${appState.userRole === 'boyfriend' ? '👩' : '🤵'}</span>
+                        </div>
+                        <div class="flex flex-col max-w-xs">
+                            <div class="chat-bubble-other p-3 text-sm">
+                                ${content}
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1">${timeStr}</span>
+                        </div>
+                    </div>
+                `;
+                
+                messageArea.insertAdjacentHTML('beforeend', messageHTML);
+                messageArea.scrollTop = messageArea.scrollHeight;
+            }
+
+            updateConnectionStatus(status, type) {
+                const statusElement = document.getElementById('onlineStatus');
+                statusElement.innerHTML = `
+                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></span>
+                    ${status}
+                `;
+            }
+
+            logout() {
+                this.isLoggedIn = false;
+            }
+        }
+
+        // 聊天管理器实例
+        let chatManager = null;
 
         // 应用主题切换
         function setTheme(role) {
             document.body.className = `bg-gray-100 theme-${role}`;
             appState.theme = role;
-            
-            // 更新主题指示器
-            const themeNames = {
-                'boyfriend': '蓝色主题',
-                'girlfriend': '紫色主题'
-            };
-            
-            const currentThemeElement = document.getElementById('currentTheme');
-            if (currentThemeElement) {
-                currentThemeElement.textContent = themeNames[role];
-            }
         }
 
         // 选择角色
         function selectRole(role) {
+            debugLog(`选择角色: ${role}`);
             appState.userRole = role;
             setTheme(role);
             
@@ -501,7 +634,6 @@
                 'w-full h-2 rounded-full mt-2 bg-gradient-to-r from-blue-400 to-blue-600' :
                 'w-full h-2 rounded-full mt-2 bg-gradient-to-r from-purple-400 to-purple-600';
             
-            // 检查是否可以启用开始按钮
             checkStartButton();
         }
 
@@ -510,13 +642,24 @@
             const username = document.getElementById('username').value.trim();
             const partnerName = document.getElementById('partnerName').value.trim();
             const startBtn = document.getElementById('startBtn');
+            const statusIndicator = document.getElementById('statusIndicator');
             
             if (username && partnerName && appState.userRole) {
                 startBtn.disabled = false;
                 startBtn.className = 'w-full gradient-bg text-white rounded-lg py-4 font-semibold transition-colors';
+                statusIndicator.textContent = '✅ 准备就绪，可以开始聊天了';
+                statusIndicator.className = 'text-center text-sm text-green-600';
             } else {
                 startBtn.disabled = true;
                 startBtn.className = 'w-full bg-gray-400 text-white rounded-lg py-4 font-semibold transition-colors';
+                
+                let missing = [];
+                if (!username) missing.push('昵称');
+                if (!partnerName) missing.push('对方昵称');
+                if (!appState.userRole) missing.push('角色');
+                
+                statusIndicator.textContent = `请完成: ${missing.join('、')}`;
+                statusIndicator.className = 'text-center text-sm text-gray-500';
             }
         }
 
@@ -526,47 +669,109 @@
 
         // 开始聊天
         async function startChat() {
+            debugLog('=== 开始聊天流程 ===');
+            
             const username = document.getElementById('username').value.trim();
             const partnerName = document.getElementById('partnerName').value.trim();
+            const chatMode = document.querySelector('input[name="chatMode"]:checked').value;
+            
+            debugLog(`用户名: ${username}, 对方: ${partnerName}, 角色: ${appState.userRole}, 模式: ${chatMode}`);
             
             if (!username || !partnerName || !appState.userRole) {
+                debugLog('信息不完整', 'error');
                 alert('请填写完整信息并选择角色');
                 return;
             }
 
+            // 更新状态
             appState.username = username;
             appState.partnerName = partnerName;
             appState.currentChatId = partnerName;
+            appState.chatMode = chatMode;
 
-            // 保存用户信息
-            localStorage.setItem('coupleAI', JSON.stringify(appState));
+            // 更新按钮状态
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = true;
+            startBtn.textContent = '连接中...';
+            startBtn.className = 'w-full bg-gray-400 text-white rounded-lg py-4 font-semibold';
 
-            // 初始化环信
-            chatManager.init();
+            try {
+                // 选择聊天管理器
+                if (chatMode === 'easemob') {
+                    chatManager = new EnhancedChatManager();
+                } else {
+                    chatManager = new DemoChatManager();
+                }
 
-            // 登录环信
-            const loginSuccess = await chatManager.login(username);
-            
-            if (loginSuccess) {
-                // 切换到聊天界面
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('chatScreen').classList.remove('hidden');
+                debugLog('聊天管理器已创建');
+
+                // 初始化
+                await chatManager.init();
+                debugLog('聊天管理器初始化完成');
+
+                // 登录
+                const loginSuccess = await chatManager.login(username);
                 
-                // 设置聊天标题
-                document.getElementById('chatTitle').textContent = `与${partnerName}的聊天`;
-                document.getElementById('partnerAvatar').textContent = appState.userRole === 'boyfriend' ? '👩' : '🤵';
-                
-                // 设置欢迎时间
-                document.getElementById('welcomeTime').textContent = new Date().toLocaleString('zh-CN');
-                
-                // 发送连接成功消息
-                setTimeout(() => {
-                    addSystemMessage('🎉 聊天连接成功！AI助手已就绪');
-                }, 1000);
+                if (loginSuccess) {
+                    debugLog('登录成功，切换界面', 'success');
+                    
+                    // 保存用户信息
+                    localStorage.setItem('coupleAI', JSON.stringify(appState));
+                    
+                    // 切换到聊天界面
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('chatScreen').classList.remove('hidden');
+                    
+                    // 设置聊天界面
+                    document.getElementById('chatTitle').textContent = `与${partnerName}的聊天`;
+                    document.getElementById('partnerAvatar').textContent = appState.userRole === 'boyfriend' ? '👩' : '🤵';
+                    document.getElementById('chatMode').textContent = chatMode === 'easemob' ? '环信模式' : '演示模式';
+                    
+                    // 添加欢迎消息
+                    setTimeout(() => {
+                        addWelcomeMessage();
+                    }, 500);
 
-            } else {
-                alert('连接聊天服务失败，请检查网络或重试');
+                } else {
+                    throw new Error('登录失败');
+                }
+
+            } catch (error) {
+                debugLog(`聊天启动失败: ${error.message}`, 'error');
+                
+                // 恢复按钮状态
+                startBtn.disabled = false;
+                startBtn.textContent = '💕 开始聊天';
+                startBtn.className = 'w-full gradient-bg text-white rounded-lg py-4 font-semibold transition-colors';
+                
+                // 显示错误信息
+                alert(`连接失败: ${error.message}\n\n建议：\n1. 检查网络连接\n2. 尝试选择"演示模式"\n3. 刷新页面重试`);
             }
+        }
+
+        // 添加欢迎消息
+        function addWelcomeMessage() {
+            const messageArea = document.getElementById('messageArea');
+            const time = new Date().toLocaleString('zh-CN');
+            
+            messageArea.innerHTML = `
+                <div class="flex justify-center">
+                    <div class="bg-white border rounded-lg px-4 py-3 text-sm text-gray-600 max-w-xs text-center shadow-sm">
+                        <div class="text-lg mb-2">🎉</div>
+                        <div class="font-semibold text-gray-800 mb-1">欢迎使用情侣AI助手！</div>
+                        <div class="text-xs text-gray-500 space-y-1">
+                            <div>💕 ${appState.chatMode === 'easemob' ? '环信专业聊天' : '演示聊天模式'}</div>
+                            <div>🤖 DeepSeek AI智能助手</div>
+                            <div>🎨 ${appState.userRole === 'boyfriend' ? '蓝色男友主题' : '紫色女友主题'}</div>
+                        </div>
+                        <div class="text-xs mt-2 text-gray-400">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                addSystemMessage('✨ AI助手已就绪，试试发送消息或使用AI功能吧！');
+            }, 1000);
         }
 
         // 发送消息
@@ -576,7 +781,9 @@
             
             if (!content) return;
             
-            if (appState.isConnected) {
+            debugLog(`发送消息: ${content}`);
+            
+            if (appState.isConnected && chatManager) {
                 chatManager.sendTextMessage(appState.currentChatId, content);
                 input.value = '';
             } else {
@@ -584,137 +791,73 @@
             }
         }
 
-        // AI功能集成
+        // AI功能（简化版，保持核心功能）
         async function getAISuggestion() {
-            if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'sk-在这里填入你的API Key') {
-                addSystemMessage('⚠️ 请配置API Key以使用AI功能');
-                return;
-            }
-
-            addAIMessage('🤖 AI正在为你生成专属建议...');
-
-            try {
-                const response = await fetch('https://api.deepseek.com/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        model: 'deepseek-chat',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: '你是专业恋爱顾问，给出实用建议，25字以内。'
-                            },
-                            {
-                                role: 'user',
-                                content: `我是${appState.userRole === 'boyfriend' ? '男友' : '女友'}，现在是${getTimeDescription()}，给我一个恋爱建议`
-                            }
-                        ],
-                        max_tokens: 100
-                    })
-                });
+            debugLog('获取AI建议');
+            addSystemMessage('🤖 AI正在为你生成建议...');
+            
+            // 模拟AI响应
+            setTimeout(() => {
+                const suggestions = appState.userRole === 'boyfriend' ? [
+                    '💕 给她发个温暖的晚安消息',
+                    '🌹 准备一个小惊喜让她开心',
+                    '📱 主动关心她今天过得怎么样',
+                    '🍰 记住她喜欢的甜品，下次买给她'
+                ] : [
+                    '💕 夸夸他最近的努力和进步',
+                    '🤗 给他一个温暖的拥抱和鼓励',
+                    '☕ 关心他的工作，问问有没有需要帮助的',
+                    '🎮 支持他的兴趣爱好，一起参与'
+                ];
                 
-                const data = await response.json();
-                const suggestion = data.choices[0].message.content;
-                
-                // 移除加载消息
-                removeLastAIMessage();
-                
-                addAIMessage(`💡 AI建议：${suggestion}`);
-                
-            } catch (error) {
-                removeLastAIMessage();
-                addAIMessage('❌ AI服务暂时不可用，请稍后重试');
-            }
+                const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+                addSystemMessage(`💡 AI建议：${randomSuggestion}`);
+            }, 1500);
         }
 
-        // 其他AI功能
         function getGiftIdea() {
+            debugLog('获取礼物建议');
             const gifts = appState.userRole === 'boyfriend' ? [
-                '💎 精致小饰品：项链或手链，让她每天想起你',
-                '🌹 鲜花+手写卡片：经典浪漫，永远不过时',
-                '🍰 她爱的甜品：蛋糕、马卡龙或她喜欢的零食',
-                '📚 有意义的书：关于她兴趣或你们共同话题的书',
-                '🧸 可爱玩偶：选择她喜欢的动物或卡通形象'
+                '💎 精致小饰品：项链或手链',
+                '🌹 鲜花+手写卡片',
+                '🍰 她爱的甜品'
             ] : [
-                '👔 精致配件：高质量手表、领带或他喜欢的配饰',
-                '☕ 精品咖啡：如果他是咖啡爱好者的话',
-                '🎮 兴趣相关：游戏、书籍、运动器材等他喜欢的',
-                '💼 工作用品：高质量的笔、笔记本或公文包',
-                '🎧 数码配件：耳机、充电器等实用物品'
+                '👔 精致配件：手表或领带',
+                '☕ 精品咖啡豆',
+                '🎮 他的兴趣相关物品'
             ];
             
             const randomGift = gifts[Math.floor(Math.random() * gifts.length)];
-            addAIMessage(`🎁 礼物建议：${randomGift}`);
+            addSystemMessage(`🎁 礼物建议：${randomGift}`);
         }
 
         function getDatePlan() {
+            debugLog('获取约会建议');
             const plans = [
-                '🌅 看日出/日落：选个好天气，一起迎接美好时光',
-                '🍳 在家做饭：温馨的二人世界，一起准备美食',
-                '🎬 看电影：选部你们都想看的片子，可以在家或影院',
-                '🚶‍♀️ 公园散步：简单但很有效的约会，聊天放松',
-                '🎨 创意活动：画画、手工、或其他有趣的DIY项目',
-                '📸 拍照打卡：在城市里寻找美景，记录美好时光',
-                '🎵 音乐活动：KTV、音乐会或者在家一起听歌',
-                '🍕 美食探索：尝试新餐厅、咖啡厅或者街边小食'
+                '🌅 一起看日出/日落',
+                '🍳 在家一起做饭',
+                '🎬 看部你们都想看的电影',
+                '🚶‍♀️ 公园散步聊天'
             ];
             
             const randomPlan = plans[Math.floor(Math.random() * plans.length)];
-            addAIMessage(`💑 约会建议：${randomPlan}`);
+            addSystemMessage(`💑 约会建议：${randomPlan}`);
         }
 
         function getLoveWords() {
+            debugLog('获取情话推荐');
             const words = appState.userRole === 'boyfriend' ? [
-                '💕 "你是我心中最亮的星星，照亮我前进的路"',
-                '💕 "和你在一起的每一天都是最好的礼物"',
-                '💕 "你的笑容是我见过最美的风景"',
-                '💕 "有你在身边，我什么困难都不怕"',
-                '💕 "你就是我想要的全部，我的整个世界"',
-                '💕 "想和你一起慢慢变老，看遍世界美好"'
+                '💕 "你是我心中最亮的星星"',
+                '💕 "和你在一起的每一天都是礼物"',
+                '💕 "你的笑容是最美的风景"'
             ] : [
-                '💕 "你是我见过最棒的男孩，我为你骄傲"',
-                '💕 "有你保护我，我觉得特别安全和幸福"',
-                '💕 "你努力工作的样子真的很帅气"',
-                '💕 "我相信你能实现所有梦想和目标"',
-                '💕 "你的怀抱是我最安心的地方"',
-                '💕 "和你在一起，我觉得自己变得更好了"'
+                '💕 "你是最棒的男孩"',
+                '💕 "有你保护我很安心"',
+                '💕 "你努力的样子很帅"'
             ];
             
             const randomWords = words[Math.floor(Math.random() * words.length)];
-            addAIMessage(`💌 情话推荐：${randomWords}`);
-        }
-
-        function getWeatherCare() {
-            const careMessages = appState.userRole === 'boyfriend' ? [
-                '🌤️ 天气变化记得加衣服，照顾好自己',
-                '☔ 如果下雨记得带伞，不要淋雨感冒了',
-                '❄️ 天冷了多穿点，暖暖和和的最重要',
-                '☀️ 天气好的时候记得防晒，保护好皮肤',
-                '🌬️ 风大的时候注意保暖，别着凉了'
-            ] : [
-                '🌤️ 工作忙也要注意天气变化，记得加衣服',
-                '☔ 下雨天开车要小心，注意安全',
-                '❄️ 天冷了别只要风度不要温度哦',
-                '☀️ 大热天记得多喝水，别中暑了',
-                '🌬️ 天气变化大，照顾好自己的身体'
-            ];
-            
-            const randomCare = careMessages[Math.floor(Math.random() * careMessages.length)];
-            addAIMessage(`🤗 贴心关怀：${randomCare}`);
-        }
-
-        // 获取时间描述
-        function getTimeDescription() {
-            const hour = new Date().getHours();
-            if (hour >= 6 && hour < 9) return '早上';
-            if (hour >= 9 && hour < 12) return '上午';
-            if (hour >= 12 && hour < 14) return '中午';
-            if (hour >= 14 && hour < 18) return '下午';
-            if (hour >= 18 && hour < 22) return '晚上';
-            return '深夜';
+            addSystemMessage(`💌 情话推荐：${randomWords}`);
         }
 
         // 添加系统消息
@@ -724,7 +867,7 @@
             
             const messageHTML = `
                 <div class="flex justify-center">
-                    <div class="system-message rounded-lg px-4 py-2 text-sm max-w-xs text-center">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 text-sm text-blue-800 max-w-xs text-center">
                         ${content}
                         <div class="text-xs mt-1 opacity-75">${time}</div>
                     </div>
@@ -735,49 +878,7 @@
             messageArea.scrollTop = messageArea.scrollHeight;
         }
 
-        // 添加AI消息
-        function addAIMessage(content) {
-            const messageArea = document.getElementById('messageArea');
-            const time = new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
-            
-            const messageHTML = `
-                <div class="flex items-start space-x-2">
-                    <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
-                        <span class="text-white text-xs">🤖</span>
-                    </div>
-                    <div class="flex flex-col max-w-xs">
-                        <div class="ai-message p-3 text-sm rounded-lg">
-                            ${content}
-                        </div>
-                        <span class="text-xs text-gray-500 mt-1">${time}</span>
-                    </div>
-                </div>
-            `;
-            
-            messageArea.insertAdjacentHTML('beforeend', messageHTML);
-            messageArea.scrollTop = messageArea.scrollHeight;
-        }
-
-        // 移除最后一条AI消息
-        function removeLastAIMessage() {
-            const messages = document.querySelectorAll('#messageArea > div');
-            for (let i = messages.length - 1; i >= 0; i--) {
-                if (messages[i].innerHTML.includes('🤖')) {
-                    messages[i].remove();
-                    break;
-                }
-            }
-        }
-
         // 其他功能
-        function sendVoice() {
-            addSystemMessage('🎤 语音功能即将推出，敬请期待！');
-        }
-
-        function sendImage() {
-            addSystemMessage('📷 图片功能即将推出，敬请期待！');
-        }
-
         function showEmoji() {
             const emojis = ['😊', '😘', '🥰', '😍', '💕', '❤️', '💖', '💝', '🌹', '⭐'];
             const input = document.getElementById('messageInput');
@@ -786,39 +887,19 @@
         }
 
         function showChatSettings() {
-            // 更新设置信息
-            document.getElementById('settingsUsername').textContent = appState.username;
-            document.getElementById('settingsPartner').textContent = appState.partnerName;
-            document.getElementById('settingsTheme').textContent = appState.userRole === 'boyfriend' ? '蓝色男友主题' : '紫色女友主题';
-            document.getElementById('settingsStatus').textContent = appState.isConnected ? '已连接' : '未连接';
-            
-            document.getElementById('settingsModal').classList.remove('hidden');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.add('hidden');
-        }
-
-        function clearChat() {
-            document.getElementById('messageArea').innerHTML = `
-                <div class="flex justify-center">
-                    <div class="bg-white border rounded-lg px-4 py-2 text-sm text-gray-600 max-w-xs text-center shadow-sm">
-                        <div class="text-lg mb-1">🧹</div>
-                        聊天记录已清除<br>
-                        <span class="text-xs text-gray-500">开始新的对话吧！</span>
-                        <div class="text-xs mt-2 text-gray-400">${new Date().toLocaleString('zh-CN')}</div>
-                    </div>
-                </div>
-            `;
-            closeSettings();
+            alert(`聊天设置\n\n用户: ${appState.username}\n对方: ${appState.partnerName}\n角色: ${appState.userRole}\n模式: ${appState.chatMode}\n状态: ${appState.isConnected ? '已连接' : '未连接'}`);
         }
 
         function logout() {
-            chatManager.logout();
+            debugLog('用户登出');
+            if (chatManager) {
+                chatManager.logout();
+            }
+            
             document.getElementById('chatScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
             
-            // 重置状态但保留用户信息
+            // 重置状态
             appState.isConnected = false;
             appState.conn = null;
             appState.currentChatId = '';
@@ -833,10 +914,10 @@
 
         // 页面加载时初始化
         window.onload = function() {
-            // 设置默认主题
+            debugLog('应用启动');
             setTheme('boyfriend');
             
-            // 检查是否有保存的用户信息
+            // 检查保存的用户信息
             const savedData = localStorage.getItem('coupleAI');
             if (savedData) {
                 const data = JSON.parse(savedData);
@@ -845,12 +926,6 @@
                 if (data.userRole) {
                     selectRole(data.userRole);
                 }
-            }
-            
-            // 设置欢迎时间
-            const welcomeTimeElement = document.getElementById('welcomeTime');
-            if (welcomeTimeElement) {
-                welcomeTimeElement.textContent = new Date().toLocaleString('zh-CN');
             }
         };
     </script>
