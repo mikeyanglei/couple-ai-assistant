@@ -3,7 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>情侣AI助手 - 完整版</title>
+    <title>情侣AI助手</title>
+    
+    <!-- PWA相关配置 -->
+    <meta name="theme-color" content="#3B82F6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="情侣AI">
+    
+    <!-- 应用图标 - 多种尺寸 -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImJnR3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojM0I4MkY2O3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNBODU1Rjc7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSIzNiIgZmlsbD0idXJsKCNiZ0dyYWRpZW50KSIvPgo8dGV4dCB4PSI5MCIgeT0iMTEwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNzAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5KJPC90ZXh0Pgo8L3N2Zz4K">
+    <link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUyIiBoZWlnaHQ9IjE1MiIgdmlld0JveD0iMCAwIDE1MiAxNTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImJnR3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojM0I4MkY2O3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNBODU1Rjc7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjE1MiIgaGVpZ2h0PSIxNTIiIHJ4PSIzMCIgZmlsbD0idXJsKCNiZ0dyYWRpZW50KSIvPgo8dGV4dCB4PSI3NiIgeT0iOTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI2MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfkokPC90ZXh0Pgo8L3N2Zz4K">
+    <link rel="apple-touch-icon" sizes="120x120" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImJnR3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojM0I4MkY2O3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNBODU1Rjc7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0idXJsKCNiZ0dyYWRpZW50KSIvPgo8dGV4dCB4PSI2MCIgeT0iNzUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0OCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfkokPC90ZXh0Pgo8L3N2Zz4K">
+    
+    <!-- 通用图标 -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iYmdHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzQjgyRjY7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I0E4NTVGN3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgcng9IjYiIGZpbGw9InVybCgjYmdHcmFkaWVudCkiLz4KPHR0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+SiTwvdGV4dD4KPC9zdmc+">
+    <link rel="icon" type="image/png" sizes="16x16" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iYmdHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzQjgyRjY7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I0E4NTVGN3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgcng9IjMiIGZpbGw9InVybCgjYmdHcmFkaWVudCkiLz4KPHR0ZXh0IHg9IjgiIHk9IjEyIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfkokPC90ZXh0Pgo8L3N2Zz4K">
+    
+    <!-- PWA Manifest内联配置 -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaDheS+oyZBSeWKqeaJiyIsCiAgInNob3J0X25hbWUiOiAi5oOF5L6jQUkiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNVGd3SWlCb1pXbG5hSFE5SW1FNE1DSWdkbWxsZDBKdmVEMGlNQ0F3SURFNE1DQXhPREFpSUdacGJHdzlJbTV2Ym1VaUlIaHRiRzV6UFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1EQXdMM04yWnlJK1BHUmxabk0rUEd4cGJtVmhjbWR5WVdScFpXNTBJR2xrUFNKaVowZHlZV1JwWlc1MElpQjRNVDBpTUNVaUlIa3hQU0l3SlNJZ2VESTlJakV3TUNVaUlIa3lQU0l4TURBbElqNDhjM1J2Y0NCdlptWnpaWFE5SW1GOU9TSWdjM1I1YkdVOUluTjBiM0F0WTI5c2IzSTZJek5DT0RKR05qdHpkRzl3TFc5d1lXTnBkSGs2TVNJZ0x6NEJjM1J2Y0NCdlptWnpaWFE5SW5FND1NalVpSUhOMGVXeGxQU0p6ZEc5d0xXTnZiRzl5T2lOQk9EVlpSamN6YzNSdmNDMXZjR0ZqYVhSNU9qRWlJQzgrUEM5c2FXNWxZWEpoWkdrcFpXNTBQand2WkdWbWMrNEJjbVZqZENCM2FXUjBhRDBpTVRnd0lpQm9aV2xuYUhROUlqRTRNQ0lnY25nOUl6TXpOaUlnWm1sc2JEME9kWUpzS0doaVowZHlZV1JwWlc1MEtUNXZQSFJsZUhRZ2VEMGlPVEFpSUhrOUlqRXhNQ0lnWm05dWRDMW1ZVzFwYkhrOUltRnlhV0ZzSWlCbWIyNTBMWE5wZW1VOUlqY3dJaUJtYVd4c1BTSjNhR2wwWlNJZ2RHVjRkQzFoYm1Ob2IzSTlJbTFwWkdSc1pTSStYekNma29rOEwzUmxlSFErUEM5emRtYysILAogICAgICAic2l6ZXMiOiAiMTgweDgwIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRVeUlpQm9aV2xuYUhROUlqRTFNaUlnZG1sbGQwSnZlRDBpTUNBd0lERTFNaUF4TlRJaUlHWnBiR3c5SW01dmJtVWlJSGh0Ykc1elBTSm9kSFJ3T2k4dmQzZDNMbmN6TG05eVp5OHlNREF3TDNOMlp5SStQR1JsWm5NK1BHeHBibVZoY21keVlXUnBaVzUwSUdsa1BTSmlaRFJoWkdsUnFaVzUwSWlCNG1UMGlNQ1VpSUhreFBTSXdKU0lnZURJOUlqRXdNQ1VpSUhreslNMGlNVEF3SlNJK1BITjBiM0FnYjJabWMyVjBQU0l3SlNJZ2MzUjViR1U5SW5OMGIzQXRZMjlzYjNJNkl6TkNPREpHTmpwemRHOXdMVzl3WVdOcGRIazZNU0lnTHo0QmMzUnZjQ0J2Wm1aelpYUXZJekV3TUNVaUlITjBlV3hsUFNKemRHOXdMV052Ykc5eU9pTkJPRFZhUmpkemMzUnZjQzF2Y0dGamFYUjVPakVpSUM4K1BDOXNhVzVsWVhKbmNtRmthV1Z1ZEE0OFEyUmxabVUrUEhKbFkzUWdkMmxrZEdnOUlqRTFNaUlnYUdWcFoyaDBQU0V4TlRJaUlISjRQU0l6TUNJZ1ptbHNiRDBpZFhKc0tHaGlaR2R5WVdScFpXNTBLU0l2UGc0OGRHVjRkQ0I0UFNJm05TSWdlVDBpT1RVaUlHWnZiblF0Wm1GdGFXeDVQU0poY21saGJDSWdabTl1ZEMxemFYcGxQU0kyTUNJZ1ptbHNiRDBpZDJocGRHVWlJSFJsZUhRdFlXNWphRzl5UFNKdGFXUmtiR1VpUGw4d240S0lKMDgwWlhoMFBqd3ZjM1puUGc9PSIsCiAgICAgICJzaXplcyI6ICIxNTJ4MTUyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgInRoZW1lX2NvbG9yIjogIiMzQjgyRjYiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRkZGRkYiCn0=">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -97,13 +116,283 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* 启动画面样式 */
+        .splash-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #3B82F6 0%, #A855F7 50%, #1D4ED8 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 4s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .splash-content {
+            position: relative;
+            z-index: 10;
+            animation: splashFadeIn 1.5s ease-out;
+        }
+        
+        @keyframes splashFadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        /* Logo 容器 */
+        .logo-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo-heart {
+            font-size: 4rem;
+            animation: heartPulse 2s ease-in-out infinite;
+            position: relative;
+            z-index: 5;
+        }
+        
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* 装饰圆环 */
+        .logo-rings {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ring {
+            position: absolute;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ring-1 {
+            width: 80px;
+            height: 80px;
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+        
+        .ring-2 {
+            width: 120px;
+            height: 120px;
+            animation: ringPulse 3s ease-in-out infinite 0.5s;
+        }
+        
+        .ring-3 {
+            width: 160px;
+            height: 160px;
+            animation: ringPulse 3s ease-in-out infinite 1s;
+        }
+        
+        @keyframes ringPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+        
+        /* 标题动画 */
+        .splash-title h1 {
+            animation: titleSlideIn 1s ease-out 0.5s both;
+        }
+        
+        .splash-title p {
+            animation: titleSlideIn 1s ease-out 0.7s both;
+        }
+        
+        @keyframes titleSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+        
+        /* 加载进度条 */
+        .loading-container {
+            animation: loadingFadeIn 1s ease-out 1s both;
+        }
+        
+        @keyframes loadingFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #60A5FA, #C084FC, #60A5FA);
+            background-size: 200% 100%;
+            border-radius: 2px;
+            animation: progressFill 3s ease-out, progressShine 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes progressFill {
+            to { width: 100%; }
+        }
+        
+        @keyframes progressShine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* 加载步骤 */
+        .loading-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            animation: stepsFadeIn 1s ease-out 1.5s both;
+        }
+        
+        @keyframes stepsFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.5;
+            transition: all 0.5s ease;
+        }
+        
+        .step.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .step-icon {
+            font-size: 1.5rem;
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .step-text {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        /* 底部信息 */
+        .splash-footer {
+            animation: footerFadeIn 1s ease-out 2s both;
+        }
+        
+        @keyframes footerFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* 退出动画 */
+        .splash-exit {
+            animation: splashExit 0.8s ease-in-out forwards;
+        }
+        
+        @keyframes splashExit {
+            0% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(1.1);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- 成功状态栏 -->
-    <div id="statusBar" class="status-bar text-white p-3 text-center">
-        <div class="max-w-md mx-auto">
-            <span>✅ 情侣AI助手已就绪 - 支持实时聊天和AI功能</span>
+    <!-- 启动画面 -->
+    <div id="splashScreen" class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="splash-background"></div>
+        <div class="splash-content text-center">
+            <!-- 主Logo -->
+            <div class="splash-logo mb-8">
+                <div class="logo-container">
+                    <div class="logo-heart">💕</div>
+                    <div class="logo-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 应用名称 -->
+            <div class="splash-title">
+                <h1 class="text-3xl font-bold text-white mb-2">情侣AI助手</h1>
+                <p class="text-white/80 text-lg">Love & Intelligence</p>
+            </div>
+            
+            <!-- 加载进度 -->
+            <div class="splash-loading mt-12">
+                <div class="loading-container">
+                    <div class="loading-bar">
+                        <div class="loading-progress"></div>
+                    </div>
+                    <div class="loading-text text-white/70 text-sm mt-3">
+                        <span id="loadingText">正在启动应用...</span>
+                    </div>
+                </div>
+                
+                <!-- 加载步骤 -->
+                <div class="loading-steps mt-6">
+                    <div class="step step-1">
+                        <div class="step-icon">🎨</div>
+                        <div class="step-text">界面初始化</div>
+                    </div>
+                    <div class="step step-2">
+                        <div class="step-icon">🤖</div>
+                        <div class="step-text">AI系统就绪</div>
+                    </div>
+                    <div class="step step-3">
+                        <div class="step-icon">💕</div>
+                        <div class="step-text">爱情助手激活</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 版本信息 -->
+            <div class="splash-footer mt-8">
+                <p class="text-white/50 text-xs">Version 1.0 • Powered by DeepSeek AI</p>
+            </div>
         </div>
     </div>
 
@@ -946,15 +1235,85 @@
             }
         });
 
-        // 页面加载时初始化
-        window.onload = function() {
+        // 启动画面管理器
+        class SplashScreenManager {
+            constructor() {
+                this.steps = [
+                    { text: '正在启动应用...', duration: 1000 },
+                    { text: '加载界面组件...', duration: 800 },
+                    { text: 'AI系统初始化...', duration: 900 },
+                    { text: '爱情助手激活中...', duration: 1200 },
+                    { text: '准备就绪！', duration: 500 }
+                ];
+                this.currentStep = 0;
+            }
+
+            async start() {
+                console.log('启动画面开始');
+                
+                // 激活第一个步骤
+                this.activateStep(1);
+                
+                // 依次执行所有步骤
+                for (let i = 0; i < this.steps.length; i++) {
+                    const step = this.steps[i];
+                    
+                    // 更新文本
+                    document.getElementById('loadingText').textContent = step.text;
+                    
+                    // 激活对应的步骤指示器
+                    if (i >= 1 && i <= 3) {
+                        this.activateStep(i);
+                    }
+                    
+                    // 等待指定时间
+                    await this.delay(step.duration);
+                }
+                
+                // 启动完成，隐藏启动画面
+                this.hide();
+            }
+
+            activateStep(stepNumber) {
+                // 移除之前的激活状态
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                });
+                
+                // 激活指定步骤及之前的所有步骤
+                for (let i = 1; i <= stepNumber; i++) {
+                    const stepElement = document.querySelector(`.step-${i}`);
+                    if (stepElement) {
+                        stepElement.classList.add('active');
+                    }
+                }
+            }
+
+            hide() {
+                const splashScreen = document.getElementById('splashScreen');
+                splashScreen.classList.add('splash-exit');
+                
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    this.onComplete();
+                }, 800);
+            }
+
+            onComplete() {
+                console.log('启动画面完成');
+                // 启动主应用
+                initializeApp();
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // 主应用初始化
+        function initializeApp() {
             console.log('情侣AI助手启动');
             setTheme('boyfriend');
-            
-            // 隐藏状态栏
-            setTimeout(() => {
-                document.getElementById('statusBar').style.display = 'none';
-            }, 3000);
             
             // 检查保存的用户信息
             const savedData = localStorage.getItem('coupleAI');
@@ -966,6 +1325,12 @@
                     selectRole(data.userRole);
                 }
             }
+        }
+
+        // 页面加载时启动
+        window.onload = function() {
+            const splashManager = new SplashScreenManager();
+            splashManager.start();
         };
     </script>
 </body>
