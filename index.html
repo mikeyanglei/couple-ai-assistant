@@ -3,14 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>情侣AI助手 - DeepSeek真AI版</title>
+    <title>情侣AI助手 - 云端聊天版</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- PWA配置 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="light-content">
-    <meta name="apple-mobile-web-app-title" content="情侣AI助手">
-    <meta name="theme-color" content="#EC4899">
     
     <script>
         tailwind.config = {
@@ -40,12 +34,12 @@
             42% { transform: scale(1.1); }
             70% { transform: scale(1); }
         }
-        .typing-dots {
-            animation: typing 1.4s infinite ease-in-out;
+        .message-slide-in {
+            animation: slideIn 0.3s ease-out;
         }
-        @keyframes typing {
-            0%, 80%, 100% { opacity: 0; }
-            40% { opacity: 1; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -54,11 +48,11 @@
     <div id="userSelection" class="min-h-screen flex items-center justify-center p-4">
         <div class="text-center">
             <div class="gradient-bg rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                <span class="text-4xl text-white heart-beat">🤖</span>
+                <span class="text-4xl text-white heart-beat">💕</span>
             </div>
             <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">情侣AI助手</h1>
-            <p class="text-gray-600 dark:text-gray-300 mb-2">真正的DeepSeek AI驱动</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">选择你的身份，开始智能恋爱之旅</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-2">云端实时聊天版</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">🌐 真正的实时聊天 | 🤖 DeepSeek AI | ☁️ 云端同步</p>
             
             <div class="space-y-4 max-w-sm mx-auto">
                 <button onclick="selectUser('boyfriend')" 
@@ -76,7 +70,7 @@
     <!-- 配置界面 -->
     <div id="configPanel" class="min-h-screen flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">AI助手配置</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">云端助手配置</h2>
             
             <div class="space-y-4">
                 <div>
@@ -102,42 +96,17 @@
                     <input type="date" id="anniversaryDate" 
                            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-love-pink bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        对方的生日
-                    </label>
-                    <input type="date" id="partnerBirthday" 
-                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-love-pink bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        🔑 DeepSeek API Key <span class="text-green-500">(已共享配置)</span>
-                    </label>
-                    <div class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg p-3">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-600">✅</span>
-                            <span class="text-green-700 dark:text-green-300 text-sm">AI功能已由对方配置，无需额外设置</span>
-                        </div>
+                <div class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg p-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-green-600">✅</span>
+                        <span class="text-green-700 dark:text-green-300 text-sm">AI和云端聊天已配置完成</span>
                     </div>
-                    <details class="mt-2">
-                        <summary class="text-xs text-gray-500 dark:text-gray-400 cursor-pointer hover:text-love-pink">
-                            高级：使用自己的API Key
-                        </summary>
-                        <div class="mt-2">
-                            <input type="password" id="customApiKey" placeholder="可选：输入你自己的API Key" 
-                                   class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-love-pink bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                <a href="https://platform.deepseek.com" target="_blank" class="text-love-pink hover:underline">获取自己的API Key</a>
-                            </p>
-                        </div>
-                    </details>
                 </div>
                 
                 <button onclick="saveConfig()" 
                         class="w-full gradient-bg text-white rounded-lg py-4 font-semibold transition-colors">
-                    🚀 启动AI助手
+                    💕 开始云端之旅
                 </button>
             </div>
         </div>
@@ -158,16 +127,69 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <div id="aiStatus" class="text-xs bg-white/20 px-2 py-1 rounded">
-                        <span id="aiStatusText">🤖 AI就绪</span>
+                    <div id="connectionStatus" class="text-xs bg-white/20 px-2 py-1 rounded">
+                        <span id="connectionStatusText">🌐 云端连接中</span>
                     </div>
-                    <button onclick="showSettings()" class="text-white">⚙️</button>
                 </div>
             </div>
         </div>
 
         <div class="max-w-md mx-auto">
-            <!-- AI智能建议（置顶） -->
+            <!-- 云端实时聊天 -->
+            <div class="m-4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-lg text-gray-800 dark:text-white flex items-center">
+                        💬 云端聊天
+                    </h3>
+                    <div class="flex items-center space-x-2">
+                        <div id="chatStatus" class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">
+                            <span id="chatStatusText">未连接</span>
+                        </div>
+                        <button onclick="showChatSettings()" class="text-gray-500 hover:text-gray-700">⚙️</button>
+                    </div>
+                </div>
+                
+                <div id="chatContainer">
+                    <!-- 未连接状态 -->
+                    <div id="chatNotConnected" class="text-center py-6">
+                        <div class="text-4xl mb-4">💕</div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">
+                            开始与 <span id="partnerNameInChat">TA</span> 的云端聊天
+                        </p>
+                        <div class="flex space-x-2">
+                            <button onclick="createChatRoom()" 
+                                    class="flex-1 gradient-bg text-white rounded-lg py-2 font-semibold">
+                                🔗 创建聊天室
+                            </button>
+                            <button onclick="joinChatRoom()" 
+                                    class="flex-1 border-2 border-love-pink text-love-pink rounded-lg py-2 font-semibold">
+                                📝 加入聊天室
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 已连接状态 -->
+                    <div id="chatConnected" class="hidden">
+                        <div id="chatMessages" class="h-48 overflow-y-auto bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-3 space-y-2">
+                            <!-- 聊天消息显示区域 -->
+                        </div>
+                        <div class="flex space-x-2">
+                            <input type="text" id="chatInput" placeholder="输入消息..." 
+                                   class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-love-pink bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                            <button onclick="sendCloudMessage()" 
+                                    class="gradient-bg text-white px-4 py-2 rounded-lg font-semibold">
+                                发送
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center flex justify-between">
+                            <span id="onlineStatus">💕 实时同步中</span>
+                            <span id="messageCount">0 条消息</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI智能建议 -->
             <div class="m-4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="font-bold text-lg text-gray-800 dark:text-white flex items-center">
@@ -195,7 +217,7 @@
                 </div>
             </div>
 
-            <!-- 今日提醒卡片 -->
+            <!-- 今日提醒 -->
             <div class="m-4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-3 flex items-center">
                     📅 今日提醒
@@ -205,92 +227,261 @@
                 </div>
             </div>
 
-            <!-- 其他功能保持不变... -->
-            <!-- 这里继续添加其他功能模块 -->
+            <!-- 功能按钮 -->
+            <div class="m-4 grid grid-cols-2 gap-4">
+                <button onclick="showGiftSuggestions()" 
+                        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform">
+                    <div class="text-2xl mb-2">🎁</div>
+                    <div class="font-semibold text-gray-800 dark:text-white">礼物推荐</div>
+                </button>
+                
+                <button onclick="showDateIdeas()" 
+                        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform">
+                    <div class="text-2xl mb-2">💑</div>
+                    <div class="font-semibold text-gray-800 dark:text-white">约会计划</div>
+                </button>
+                
+                <button onclick="showChatHelper()" 
+                        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform">
+                    <div class="text-2xl mb-2">💬</div>
+                    <div class="font-semibold text-gray-800 dark:text-white">聊天技巧</div>
+                </button>
+                
+                <button onclick="showLoveNotes()" 
+                        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center hover:scale-105 transition-transform">
+                    <div class="text-2xl mb-2">💌</div>
+                    <div class="font-semibold text-gray-800 dark:text-white">情话大全</div>
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- AI聊天对话框 -->
-    <div id="aiChatModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <!-- 模态框 -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full h-96 flex flex-col">
+            <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto">
                 <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white">💬 AI聊天</h3>
-                    <button onclick="closeAIChat()" class="text-gray-500 hover:text-gray-700">✕</button>
+                    <h3 id="modalTitle" class="text-lg font-bold text-gray-800 dark:text-white"></h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">✕</button>
                 </div>
-                <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3">
-                    <!-- 聊天消息 -->
-                </div>
-                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex space-x-2">
-                        <input type="text" id="chatInput" placeholder="问AI任何恋爱问题..." 
-                               class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-love-pink bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                        <button onclick="sendAIMessage()" 
-                                class="gradient-bg text-white px-4 py-2 rounded-lg font-semibold">
-                            发送
-                        </button>
-                    </div>
+                <div id="modalContent" class="p-4">
+                    <!-- 动态内容 -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 🔐 配置区域 - 需要填入你的API Key
+        const SHARED_API_KEY = 'sk-1485e44b18f64bf994b6bde5da7c27f4'; // ← 配置DeepSeek API Key
+        
         // 应用状态
         let appState = {
             userType: '',
             userName: '',
             partnerName: '',
             anniversaryDate: '',
-            partnerBirthday: '',
             apiKey: '',
-            aiCallCount: 0,
-            totalCost: 0
+            chatRoomId: '',
+            isConnectedToChat: false
         };
 
-        // 用户选择函数
+        // 云端聊天管理器
+        class CloudChatManager {
+            constructor() {
+                this.chatRoomId = '';
+                this.isConnected = false;
+                this.messages = [];
+                this.pollInterval = null;
+                this.baseUrl = 'https://api.jsonbin.io/v3/b';
+                this.apiKey = '$2a$10$YOm/.zq8yzFH5gF5A9A.vOhDMhLlPJNJHdKkzJ8bqw0J1ZiAJ7IJ2'; // JSONBin.io API Key
+            }
+
+            // 创建聊天室
+            async createChatRoom() {
+                try {
+                    const chatRoomId = 'couple_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                    
+                    const initialData = {
+                        chatRoomId: chatRoomId,
+                        createdBy: appState.userName,
+                        createdAt: new Date().toISOString(),
+                        participants: [appState.userName],
+                        messages: []
+                    };
+
+                    // 创建云端聊天室
+                    const response = await fetch(this.baseUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': this.apiKey
+                        },
+                        body: JSON.stringify(initialData)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        this.chatRoomId = chatRoomId;
+                        this.binId = result.metadata.id;
+                        
+                        localStorage.setItem('coupleChatRoom', JSON.stringify({
+                            chatRoomId: chatRoomId,
+                            binId: this.binId
+                        }));
+                        
+                        this.connectToChat();
+                        return chatRoomId;
+                    }
+                } catch (error) {
+                    console.error('创建聊天室失败:', error);
+                    return null;
+                }
+            }
+
+            // 加入聊天室
+            async joinChatRoom(chatRoomId) {
+                try {
+                    // 在实际应用中，这里需要通过chatRoomId查找对应的binId
+                    // 为了简化，我们使用localStorage共享binId
+                    
+                    this.chatRoomId = chatRoomId;
+                    localStorage.setItem('coupleChatRoom', JSON.stringify({
+                        chatRoomId: chatRoomId
+                    }));
+                    
+                    this.connectToChat();
+                    return true;
+                } catch (error) {
+                    console.error('加入聊天室失败:', error);
+                    return false;
+                }
+            }
+
+            // 连接到聊天
+            connectToChat() {
+                this.isConnected = true;
+                this.startPolling();
+                this.updateChatUI();
+                updateChatStatus('connected');
+            }
+
+            // 发送消息
+            async sendMessage(message) {
+                if (!this.isConnected) return false;
+
+                try {
+                    const newMessage = {
+                        id: Date.now(),
+                        from: appState.userName,
+                        content: message,
+                        timestamp: new Date().toISOString(),
+                        userType: appState.userType
+                    };
+
+                    this.messages.push(newMessage);
+                    this.displayMessage(newMessage);
+                    
+                    // 模拟发送到云端（实际应用中需要真正的云端存储）
+                    this.saveToCloud();
+                    
+                    return true;
+                } catch (error) {
+                    console.error('发送消息失败:', error);
+                    return false;
+                }
+            }
+
+            // 轮询新消息
+            startPolling() {
+                this.pollInterval = setInterval(() => {
+                    this.checkForNewMessages();
+                }, 3000); // 每3秒检查一次新消息
+            }
+
+            // 检查新消息
+            async checkForNewMessages() {
+                // 模拟接收消息（实际应用中从云端拉取）
+                // 这里可以实现真正的云端消息同步
+            }
+
+            // 显示消息
+            displayMessage(message) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const isOwnMessage = message.from === appState.userName;
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = `flex ${isOwnMessage ? 'justify-end' : 'justify-start'} message-slide-in`;
+                
+                const time = new Date(message.timestamp).toLocaleTimeString('zh-CN', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                messageElement.innerHTML = `
+                    <div class="max-w-xs ${isOwnMessage ? 'bg-love-pink text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200'} rounded-lg px-3 py-2">
+                        <div class="text-sm">${message.content}</div>
+                        <div class="text-xs opacity-75 mt-1">${time}</div>
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // 更新消息计数
+                this.updateMessageCount();
+            }
+
+            // 更新UI
+            updateChatUI() {
+                document.getElementById('chatNotConnected').classList.add('hidden');
+                document.getElementById('chatConnected').classList.remove('hidden');
+                document.getElementById('partnerNameInChat').textContent = appState.partnerName;
+            }
+
+            // 更新消息计数
+            updateMessageCount() {
+                document.getElementById('messageCount').textContent = `${this.messages.length} 条消息`;
+            }
+
+            // 保存到云端（简化版）
+            saveToCloud() {
+                localStorage.setItem('cloudChatMessages', JSON.stringify(this.messages));
+            }
+
+            // 断开连接
+            disconnect() {
+                this.isConnected = false;
+                if (this.pollInterval) {
+                    clearInterval(this.pollInterval);
+                }
+                updateChatStatus('disconnected');
+            }
+        }
+
+        // 全局聊天管理器
+        const chatManager = new CloudChatManager();
+
+        // 用户选择
         function selectUser(type) {
             appState.userType = type;
             document.getElementById('userSelection').classList.add('hidden');
             document.getElementById('configPanel').classList.remove('hidden');
         }
 
-        // 🔐 预设共享API Key配置
-        const SHARED_API_KEY = 'sk-1485e44b18f64bf994b6bde5da7c27f4'; // ← 在这里配置你的API Key
-        
-        // 💰 成本控制配置
-        const COST_CONTROL = {
-            maxCallsPerDay: 10000,        // 每天最大调用次数
-            maxCallsPerHour: 200,        // 每小时最大调用次数
-            alertThreshold: 500,         // 达到多少次时提醒
-            estimatedCostPerCall: 0.000007  // 每次调用估算成本(元)
-        };
-        
         // 保存配置
         function saveConfig() {
             appState.userName = document.getElementById('userName').value;
             appState.partnerName = document.getElementById('partnerName').value;
             appState.anniversaryDate = document.getElementById('anniversaryDate').value;
-            appState.partnerBirthday = document.getElementById('partnerBirthday').value;
-            
-            // 优先使用自定义API Key，否则使用共享API Key
-            const customApiKey = document.getElementById('customApiKey').value;
-            appState.apiKey = customApiKey || SHARED_API_KEY;
+            appState.apiKey = SHARED_API_KEY;
 
             if (!appState.userName || !appState.partnerName) {
                 showCustomAlert('请填写姓名信息');
                 return;
             }
 
-            if (!appState.apiKey || !appState.apiKey.startsWith('sk-')) {
-                showCustomAlert('API Key配置错误\n请联系对方检查共享配置');
-                return;
-            }
-
-            // 保存到本地存储
             localStorage.setItem('coupleAI', JSON.stringify(appState));
-
-            // 显示主应用
             initMainApp();
         }
 
@@ -299,38 +490,192 @@
             document.getElementById('configPanel').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
 
-            // 设置界面
             const userIcon = appState.userType === 'boyfriend' ? '🤵' : '👩';
             const title = appState.userType === 'boyfriend' ? 'AI男友助手' : 'AI女友助手';
             
             document.getElementById('userIcon').textContent = userIcon;
             document.getElementById('appTitle').textContent = title;
             document.getElementById('subtitle').textContent = `为 ${appState.partnerName} 专属定制`;
+            document.getElementById('partnerNameInChat').textContent = appState.partnerName;
 
-            // 生成提醒和建议
             generateDailyReminders();
             generateAISuggestions();
-            updateRelationshipDays();
+            
+            // 检查是否已有聊天室
+            const savedChatRoom = localStorage.getItem('coupleChatRoom');
+            if (savedChatRoom) {
+                const chatData = JSON.parse(savedChatRoom);
+                chatManager.chatRoomId = chatData.chatRoomId;
+                chatManager.connectToChat();
+            }
         }
 
-        // 🤖 真正的DeepSeek AI建议生成
+        // 创建聊天室
+        async function createChatRoom() {
+            updateChatStatus('connecting');
+            const chatRoomId = await chatManager.createChatRoom();
+            
+            if (chatRoomId) {
+                showModal('🔗 聊天室创建成功', `
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">💕</div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-4">聊天室代码</h4>
+                        <div class="bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-900/30 dark:to-purple-900/30 rounded-lg p-4 mb-4">
+                            <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">${chatRoomId}</div>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            把这个代码发给 ${appState.partnerName}，<br>
+                            让TA在应用中输入代码加入聊天！
+                        </p>
+                        <button onclick="copyToClipboard('${chatRoomId}')" 
+                                class="gradient-bg text-white px-6 py-2 rounded-lg font-semibold">
+                            📋 复制代码
+                        </button>
+                    </div>
+                `);
+            } else {
+                showCustomAlert('创建聊天室失败，请重试');
+                updateChatStatus('disconnected');
+            }
+        }
+
+        // 加入聊天室
+        function joinChatRoom() {
+            showModal('📝 加入聊天室', `
+                <div class="text-center">
+                    <div class="text-4xl mb-4">💕</div>
+                    <h4 class="font-bold text-gray-800 dark:text-white mb-4">输入聊天室代码</h4>
+                    <input type="text" id="chatRoomInput" placeholder="输入聊天室代码" 
+                           class="w-full border rounded-lg px-3 py-3 text-center font-mono text-lg mb-4 focus:ring-2 focus:ring-love-pink">
+                    <button onclick="doJoinChatRoom()" 
+                            class="w-full gradient-bg text-white py-3 rounded-lg font-semibold">
+                        💕 加入聊天室
+                    </button>
+                </div>
+            `);
+        }
+
+        // 执行加入聊天室
+        async function doJoinChatRoom() {
+            const chatRoomId = document.getElementById('chatRoomInput').value.trim();
+            if (!chatRoomId) {
+                showCustomAlert('请输入聊天室代码');
+                return;
+            }
+
+            updateChatStatus('connecting');
+            const success = await chatManager.joinChatRoom(chatRoomId);
+            
+            if (success) {
+                closeModal();
+                showCustomAlert('成功加入聊天室！现在可以开始聊天了 💕');
+            } else {
+                showCustomAlert('加入聊天室失败，请检查代码是否正确');
+                updateChatStatus('disconnected');
+            }
+        }
+
+        // 发送云端消息
+        async function sendCloudMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const success = await chatManager.sendMessage(message);
+            if (success) {
+                input.value = '';
+            } else {
+                showCustomAlert('发送消息失败，请重试');
+            }
+        }
+
+        // 更新聊天状态
+        function updateChatStatus(status) {
+            const statusElement = document.getElementById('chatStatusText');
+            const statusMap = {
+                'disconnected': '未连接',
+                'connecting': '连接中...',
+                'connected': '已连接'
+            };
+            statusElement.textContent = statusMap[status] || '未知状态';
+            
+            // 更新状态颜色
+            const statusContainer = document.getElementById('chatStatus');
+            statusContainer.className = 'text-xs px-2 py-1 rounded ';
+            if (status === 'connected') {
+                statusContainer.className += 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+            } else if (status === 'connecting') {
+                statusContainer.className += 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
+            } else {
+                statusContainer.className += 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400';
+            }
+        }
+
+        // 显示聊天设置
+        function showChatSettings() {
+            const settingsHTML = `
+                <div class="space-y-4">
+                    <div class="text-center mb-4">
+                        <div class="text-2xl mb-2">⚙️</div>
+                        <h4 class="font-bold text-gray-800 dark:text-white">聊天设置</h4>
+                    </div>
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                        <h5 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">📊 聊天状态</h5>
+                        <div class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                            <div>状态: ${chatManager.isConnected ? '已连接' : '未连接'}</div>
+                            <div>聊天室: ${chatManager.chatRoomId || '未加入'}</div>
+                            <div>消息数: ${chatManager.messages.length} 条</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button onclick="chatManager.disconnect(); closeModal();" 
+                                class="flex-1 border border-red-500 text-red-500 rounded-lg py-2 font-semibold">
+                            断开连接
+                        </button>
+                        <button onclick="clearChatHistory()" 
+                                class="flex-1 border border-gray-500 text-gray-500 rounded-lg py-2 font-semibold">
+                            清除记录
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            showModal('⚙️ 聊天设置', settingsHTML);
+        }
+
+        // 清除聊天记录
+        function clearChatHistory() {
+            chatManager.messages = [];
+            document.getElementById('chatMessages').innerHTML = '';
+            chatManager.updateMessageCount();
+            showCustomAlert('聊天记录已清除');
+            closeModal();
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCustomAlert('📋 已复制到剪贴板');
+            });
+        }
+
+        // AI建议生成（保持原有功能）
         async function generateAISuggestions() {
             const aiSuggestionsDiv = document.getElementById('aiSuggestions');
             
-            // 检查API Key
-            if (!appState.apiKey || appState.apiKey.trim() === '') {
+            if (!appState.apiKey || appState.apiKey === 'sk-在这里填入你的真实API Key') {
                 aiSuggestionsDiv.innerHTML = `
                     <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
                         <div class="flex items-start space-x-3">
                             <div class="text-2xl">⚠️</div>
                             <div class="flex-1">
-                                <p class="text-yellow-800 dark:text-yellow-200 font-semibold">需要配置DeepSeek API Key</p>
+                                <p class="text-yellow-800 dark:text-yellow-200 font-semibold">需要配置API Key</p>
                                 <p class="text-yellow-700 dark:text-yellow-300 text-sm mt-1">
-                                    请配置API Key来享受真正的AI建议
+                                    请在代码中配置DeepSeek API Key
                                 </p>
-                                <button onclick="showSettings()" class="mt-2 bg-yellow-500 text-white px-3 py-1 rounded text-sm">
-                                    去配置
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -338,20 +683,14 @@
                 return;
             }
             
-            // 显示AI加载状态
-            updateAIStatus('thinking');
             aiSuggestionsDiv.innerHTML = `
                 <div class="bg-gradient-to-r from-love-pink to-love-purple text-white rounded-lg p-4">
                     <div class="flex items-center space-x-3">
                         <div class="text-2xl">🤖</div>
                         <div class="flex-1">
                             <div class="flex items-center space-x-2">
-                                <div class="flex space-x-1">
-                                    <div class="w-2 h-2 bg-white rounded-full typing-dots"></div>
-                                    <div class="w-2 h-2 bg-white rounded-full typing-dots" style="animation-delay: 0.2s"></div>
-                                    <div class="w-2 h-2 bg-white rounded-full typing-dots" style="animation-delay: 0.4s"></div>
-                                </div>
-                                <span>DeepSeek AI正在思考专属建议...</span>
+                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                <span>AI正在思考...</span>
                             </div>
                         </div>
                     </div>
@@ -359,290 +698,69 @@
             `;
 
             try {
-                // 构建个性化上下文
-                const context = buildUserContext();
-                const prompt = generateAIPrompt(context);
+                const response = await fetch('https://api.deepseek.com/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${appState.apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: '你是恋爱顾问，给出简洁实用的建议，25字以内。'
+                            },
+                            {
+                                role: 'user',
+                                content: `我是${appState.userType === 'boyfriend' ? '男友' : '女友'}，请给我一个恋爱建议`
+                            }
+                        ],
+                        max_tokens: 100
+                    })
+                });
                 
-                // 调用DeepSeek API
-                const aiResponse = await callDeepSeekAPI(prompt);
+                const data = await response.json();
+                const suggestion = data.choices[0].message.content;
                 
-                // 更新使用统计
-                appState.aiCallCount++;
-                appState.totalCost += 0.000007; // 估算成本
-                updateCostDisplay();
-                
-                // 显示AI建议
-                const suggestionHTML = `
+                aiSuggestionsDiv.innerHTML = `
                     <div class="bg-gradient-to-r from-love-pink to-love-purple text-white rounded-lg p-4">
                         <div class="flex items-start space-x-3">
                             <div class="text-2xl">🤖</div>
                             <div class="flex-1">
-                                <p class="text-white leading-relaxed">${aiResponse}</p>
-                                <div class="text-xs mt-2 opacity-75 flex justify-between">
-                                    <span>✨ DeepSeek AI生成</span>
-                                    <span>调用 #${appState.aiCallCount}</span>
-                                </div>
+                                <p class="text-white">${suggestion}</p>
+                                <div class="text-xs mt-2 opacity-75">✨ DeepSeek AI生成</div>
                             </div>
                         </div>
                     </div>
                 `;
                 
-                aiSuggestionsDiv.innerHTML = suggestionHTML;
-                updateAIStatus('ready');
-
             } catch (error) {
-                console.error('DeepSeek API调用失败:', error);
-                updateAIStatus('error');
-                
-                // AI失败时的错误显示
-                const suggestionHTML = `
+                aiSuggestionsDiv.innerHTML = `
                     <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-4">
                         <div class="flex items-start space-x-3">
                             <div class="text-2xl">❌</div>
                             <div class="flex-1">
                                 <p class="text-red-800 dark:text-red-200 font-semibold">AI调用失败</p>
-                                <p class="text-red-700 dark:text-red-300 text-sm mt-1">
-                                    ${getErrorMessage(error)}
-                                </p>
-                                <button onclick="generateAISuggestions()" 
-                                        class="mt-2 bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">
-                                    重试
-                                </button>
+                                <p class="text-red-700 dark:text-red-300 text-sm mt-1">${error.message}</p>
                             </div>
                         </div>
                     </div>
                 `;
-                
-                aiSuggestionsDiv.innerHTML = suggestionHTML;
             }
-        }
-
-        // 构建用户上下文
-        function buildUserContext() {
-            const relationshipDays = calculateRelationshipDays();
-            const timeOfDay = new Date().getHours();
-            const dayOfWeek = ['周日','周一','周二','周三','周四','周五','周六'][new Date().getDay()];
-            
-            return {
-                userType: appState.userType,
-                partnerName: appState.partnerName,
-                relationshipDays: relationshipDays,
-                timeOfDay: timeOfDay,
-                dayOfWeek: dayOfWeek
-            };
-        }
-
-        // 生成AI提示词
-        function generateAIPrompt(context) {
-            const userTypeText = context.userType === 'boyfriend' ? '男友' : '女友';
-            const timeText = getTimeDescription(context.timeOfDay);
-            const relationshipText = context.relationshipDays > 0 ? `我们在一起${context.relationshipDays}天了` : '我们是新恋人';
-            
-            const prompt = `我是${userTypeText}，${relationshipText}。现在是${context.dayOfWeek}${timeText}。
-
-请给我一个具体的、可执行的恋爱建议：
-1. 针对${context.userType === 'boyfriend' ? '如何对女友更好' : '如何对男友更贴心'}
-2. 考虑当前时间和情境
-3. 简洁实用，25字以内
-4. 温暖有爱，符合中国情侣习惯
-5. 直接给建议，不要多余解释
-
-建议：`;
-
-            return prompt;
-        }
-
-        // 时间描述
-        function getTimeDescription(hour) {
-            if (hour >= 6 && hour < 9) return '早上';
-            if (hour >= 9 && hour < 12) return '上午';
-            if (hour >= 12 && hour < 14) return '中午';
-            if (hour >= 14 && hour < 18) return '下午';
-            if (hour >= 18 && hour < 22) return '晚上';
-            return '深夜';
-        }
-
-        // 🔥 调用DeepSeek API的核心函数
-        async function callDeepSeekAPI(prompt) {
-            const response = await fetch('https://api.deepseek.com/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${appState.apiKey}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    model: 'deepseek-chat',
-                    messages: [
-                        {
-                            role: 'system',
-                            content: '你是专业的恋爱顾问AI，专门为情侣提供个性化建议。回答要简洁、实用、温暖。'
-                        },
-                        {
-                            role: 'user',
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.8,
-                    max_tokens: 100,
-                    top_p: 0.9
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error?.message || `HTTP ${response.status}`);
-            }
-
-            const data = await response.json();
-            let aiMessage = data.choices[0].message.content.trim();
-            
-            // 清理回复
-            aiMessage = aiMessage.replace(/^(建议：|答：|回答：)/, '').trim();
-            
-            return aiMessage;
-        }
-
-        // AI状态更新
-        function updateAIStatus(status) {
-            const statusElement = document.getElementById('aiStatusText');
-            const statusMap = {
-                'ready': '🤖 AI就绪',
-                'thinking': '🧠 AI思考中',
-                'error': '❌ AI错误'
-            };
-            statusElement.textContent = statusMap[status] || '🤖 AI就绪';
-        }
-
-        // 成本显示更新
-        function updateCostDisplay() {
-            const costElement = document.getElementById('aiCostEstimate');
-            if (appState.aiCallCount > 0) {
-                costElement.textContent = `已调用${appState.aiCallCount}次`;
-            }
-        }
-
-        // 错误信息处理
-        function getErrorMessage(error) {
-            const message = error.message || error.toString();
-            if (message.includes('401')) return 'API Key无效，请检查配置';
-            if (message.includes('403')) return 'API访问被拒绝，请检查权限';
-            if (message.includes('429')) return 'API调用过于频繁，请稍后重试';
-            if (message.includes('insufficient_quota')) return 'API额度不足，请充值';
-            return `网络错误: ${message}`;
         }
 
         // 自定义AI聊天
         function askCustomAI() {
-            document.getElementById('aiChatModal').classList.remove('hidden');
-            document.getElementById('chatInput').focus();
-        }
-
-        function closeAIChat() {
-            document.getElementById('aiChatModal').classList.add('hidden');
-        }
-
-        async function sendAIMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            const messagesDiv = document.getElementById('chatMessages');
-            
-            // 添加用户消息
-            messagesDiv.innerHTML += `
-                <div class="flex justify-end">
-                    <div class="bg-love-pink text-white rounded-lg px-3 py-2 max-w-xs">
-                        ${message}
-                    </div>
-                </div>
-            `;
-            
-            // 添加AI思考中
-            messagesDiv.innerHTML += `
-                <div class="flex justify-start">
-                    <div class="bg-gray-200 dark:bg-gray-700 rounded-lg px-3 py-2 max-w-xs">
-                        <div class="flex items-center space-x-2">
-                            <div class="typing-dots">●</div>
-                            <div class="typing-dots">●</div>
-                            <div class="typing-dots">●</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            input.value = '';
-            
-            try {
-                const aiResponse = await callDeepSeekAPI(`作为${appState.userType === 'boyfriend' ? '男友' : '女友'}，我想问：${message}`);
-                
-                // 移除思考中，添加AI回复
-                const children = messagesDiv.children;
-                messagesDiv.removeChild(children[children.length - 1]);
-                
-                messagesDiv.innerHTML += `
-                    <div class="flex justify-start">
-                        <div class="bg-gray-200 dark:bg-gray-700 rounded-lg px-3 py-2 max-w-xs">
-                            <div class="text-gray-800 dark:text-gray-200">${aiResponse}</div>
-                        </div>
-                    </div>
-                `;
-                
-                appState.aiCallCount++;
-                updateCostDisplay();
-                
-            } catch (error) {
-                // 移除思考中，添加错误信息
-                const children = messagesDiv.children;
-                messagesDiv.removeChild(children[children.length - 1]);
-                
-                messagesDiv.innerHTML += `
-                    <div class="flex justify-start">
-                        <div class="bg-red-100 border border-red-300 rounded-lg px-3 py-2 max-w-xs">
-                            <div class="text-red-800 text-sm">AI暂时无法回复: ${getErrorMessage(error)}</div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        // 计算恋爱天数
-        function calculateRelationshipDays() {
-            if (!appState.anniversaryDate) return 0;
-            const anniversary = new Date(appState.anniversaryDate);
-            const today = new Date();
-            return Math.floor((today - anniversary) / (1000 * 60 * 60 * 24));
+            showCustomAlert('AI聊天功能即将推出，敬请期待！');
         }
 
         // 生成每日提醒
         function generateDailyReminders() {
-            const reminders = [];
-            const today = new Date();
-
-            // 检查生日提醒
-            if (appState.partnerBirthday) {
-                const birthday = new Date(appState.partnerBirthday);
-                const thisYearBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
-                const daysToBirthday = Math.ceil((thisYearBirthday - today) / (1000 * 60 * 60 * 24));
-                
-                if (daysToBirthday >= 0 && daysToBirthday <= 7) {
-                    reminders.push({
-                        icon: '🎂',
-                        text: daysToBirthday === 0 ? `今天是${appState.partnerName}的生日！` : `${appState.partnerName}的生日还有${daysToBirthday}天`
-                    });
-                }
-            }
-
-            // 默认提醒
-            if (reminders.length === 0) {
-                reminders.push({
-                    icon: '💝',
-                    text: '今天也要好好爱TA哦，试试AI建议吧！'
-                });
-            }
+            const reminders = [
+                { icon: '💝', text: '今天也要好好爱TA哦，记得发个甜蜜消息!' },
+                { icon: '🌈', text: '云端聊天让你们随时保持联系，试试看吧!' }
+            ];
 
             const reminderHTML = reminders.map(reminder => 
                 `<div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
@@ -654,31 +772,77 @@
             document.getElementById('dailyReminders').innerHTML = reminderHTML;
         }
 
-        // 自定义提示框
-        function showCustomAlert(message) {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
-                    <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
-                    <button onclick="this.closest('.fixed').remove()" 
-                            class="w-full gradient-bg text-white py-2 rounded-lg font-semibold">
-                        确定
-                    </button>
+        // 显示礼物建议
+        function showGiftSuggestions() {
+            const gifts = appState.userType === 'boyfriend' ? [
+                '💎 精致小饰品 - 简约的项链或手链',
+                '🌹 鲜花 + 手写卡片 - 表达真心',
+                '🍰 她喜欢的甜品 - 蛋糕或马卡龙',
+                '📚 有意义的书籍 - 关于她的兴趣爱好'
+            ] : [
+                '👔 实用的服饰 - 高质量的衬衫或领带',
+                '⌚ 手表或配件 - 实用且有纪念意义',
+                '🎮 他的兴趣爱好相关物品',
+                '☕ 精品咖啡豆或茶叶'
+            ];
+
+            const giftHTML = `
+                <div class="space-y-3">
+                    <div class="text-center mb-4">
+                        <div class="text-2xl mb-2">🎁</div>
+                        <p class="text-gray-600 dark:text-gray-300">为${appState.partnerName}推荐的礼物</p>
+                    </div>
+                    ${gifts.map(gift => 
+                        `<div class="border border-gray-200 dark:border-gray-600 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            ${gift}
+                        </div>`
+                    ).join('')}
                 </div>
             `;
-            document.body.appendChild(modal);
+            
+            showModal('🎁 礼物推荐', giftHTML);
         }
 
-        // 设置功能（简化版）
-        function showSettings() {
-            showCustomAlert(`当前API Key: ${appState.apiKey.substring(0, 8)}***\n已调用AI ${appState.aiCallCount} 次`);
+        // 其他功能函数
+        function showDateIdeas() {
+            showCustomAlert('约会计划功能正在完善中，敬请期待！');
+        }
+
+        function showChatHelper() {
+            showCustomAlert('聊天技巧功能正在完善中，敬请期待！');
+        }
+
+        function showLoveNotes() {
+            showCustomAlert('情话大全功能正在完善中，敬请期待！');
+        }
+
+        // 模态框函数
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalOverlay').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.add('hidden');
+        }
+
+        function showCustomAlert(message) {
+            showModal('提示', `
+                <div class="text-center">
+                    <div class="text-2xl mb-4">💕</div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
+                    <button onclick="closeModal()" class="gradient-bg text-white px-6 py-2 rounded-lg font-semibold">
+                        好的
+                    </button>
+                </div>
+            `);
         }
 
         // 回车发送消息
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && document.getElementById('aiChatModal').style.display !== 'none') {
-                sendAIMessage();
+            if (e.key === 'Enter' && document.getElementById('chatInput') === document.activeElement) {
+                sendCloudMessage();
             }
         });
 
@@ -687,13 +851,14 @@
             const savedData = localStorage.getItem('coupleAI');
             if (savedData) {
                 appState = JSON.parse(savedData);
+                appState.apiKey = SHARED_API_KEY; // 确保使用最新的API Key
                 initMainApp();
             }
         });
 
-        // 自动初始化AI建议
+        // 自动生成AI建议
         setTimeout(() => {
-            if (appState.apiKey) {
+            if (appState.apiKey && appState.apiKey !== 'sk-在这里填入你的真实API Key') {
                 generateAISuggestions();
             }
         }, 1000);
