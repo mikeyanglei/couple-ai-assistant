@@ -256,13 +256,13 @@
         }
 
         // 🔐 预设共享API Key配置
-        const SHARED_API_KEY = 'sk-在这里填入你的真实API Key'; // ← 在这里配置你的API Key
+        const SHARED_API_KEY = 'sk-1485e44b18f64bf994b6bde5da7c27f4'; // ← 在这里配置你的API Key
         
         // 💰 成本控制配置
         const COST_CONTROL = {
-            maxCallsPerDay: 100,        // 每天最大调用次数
-            maxCallsPerHour: 20,        // 每小时最大调用次数
-            alertThreshold: 50,         // 达到多少次时提醒
+            maxCallsPerDay: 10000,        // 每天最大调用次数
+            maxCallsPerHour: 200,        // 每小时最大调用次数
+            alertThreshold: 500,         // 达到多少次时提醒
             estimatedCostPerCall: 0.000007  // 每次调用估算成本(元)
         };
         
